@@ -2,12 +2,12 @@ import { initializeApp, getApps } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBDV3CQsUPkRQEoPLdyVfxwhFmQ-o5YLJc",
-    authDomain: "wordswolf-72648.firebaseapp.com",
-    projectId: "wordswolf-72648",
-    storageBucket: "wordswolf-72648.appspot.com",
-    messagingSenderId: "1061296992918",
-    appId: "1:1061296992918:web:d973c1d91d2305ee02c8b7"
+    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_APP_ID,
 }
 let firebaseApp = ""
 const apps = getApps()

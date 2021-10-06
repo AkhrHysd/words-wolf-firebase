@@ -9,8 +9,6 @@ export default function Home() {
   const [status, setStatus] = useState('')
   const [userName, setUserName] = useState('')
   const existRooms = query(collection(db, "words"), where("a","==", true))
-  const router = useRouter()
-  const te = 7331
 
   // 部屋番号の生成
   const randRoom = () => {

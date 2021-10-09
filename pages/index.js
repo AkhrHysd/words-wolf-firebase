@@ -1,14 +1,17 @@
 import {useState, useEffect} from 'react'
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import { useRouter } from 'next/router'
+import { doc, collection, addDoc, getDocs, getDoc, query, where, deleteDoc, onSnapshot, docChanges } from "firebase/firestore";
 import {db} from '../components/fire'
+import Room from '../components/room'
 
 export default function Home() {
   const [message, setMessage] = useState('Words Wolf')
+  const [roomNumberTemp, setRoomNumberTemp] = useState('')
   const [roomNumber, setRoomNumber] = useState('')
+  const [roomId, setRoomId] = useState('')
   const [status, setStatus] = useState('')
   const [userName, setUserName] = useState('')
   const existRooms = query(collection(db, "words"), where("a","==", true))
+  let roomData = []
 
   // 部屋番号の生成
   const randRoom = () => {
@@ -45,28 +48,33 @@ export default function Home() {
       status: 0,
     }
     const docRef = await addDoc(collection(db, "rooms"), ob)
+    roomData = await getDoc(docRef)
+    setRoomId(roomData.id)
     setRoomNumber(roomNumber)
     setStatus(0)
   })
 
+  // 部屋削除
+  const deleteRoom = ( async () => {
+    
+  })
+
+  const members = ( async () => {
+
+  })
+
+
   const onChangeRoomNumber = ((e)=> {
-    setRoomNumber(e.target.value)
+    setRoomNumberTemp(e.target.value)
   })
 
   const enterRoom = (() => {
-    router.push('/fire?id='+roomNumber)
+    console.log(roomNumberTemp)
+    setRoomNumber(roomNumberTemp)
   })
   if(roomNumber) {
     return (
-      <div>
-        <h1>{message}</h1>
-        <div>
-          {roomNumber}
-        </div>
-        <div>
-          {status}
-        </div>
-      </div>
+      <Room id={roomId} message={message} number={roomNumber}/>
     )
   }
   return (

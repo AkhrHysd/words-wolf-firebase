@@ -35,3 +35,9 @@ yarn-error.log*
 
 # firebase
 .firebasesdk
+
+node_modules
+*.log
+.nuxt
+nuxt.d.ts
+.output

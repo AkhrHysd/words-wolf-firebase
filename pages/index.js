@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { doc, collection, addDoc, getDocs, getDoc, query, where, deleteDoc, onSnapshot, docChanges } from "firebase/firestore";
+import { doc, collection, addDoc, setDoc, getDocs, getDoc, query, where, deleteDoc, onSnapshot, docChanges } from "firebase/firestore";
 import {db} from '../components/fire'
 import Room from '../components/room'
 
@@ -47,9 +47,8 @@ export default function Home() {
       number: roomNumber,
       status: 0,
     }
-    const docRef = await addDoc(collection(db, "rooms"), ob)
-    roomData = await getDoc(docRef)
-    setRoomId(roomData.id)
+    const docRef = await setDoc(doc(db, "rooms", String(roomNumber)), ob)
+    setRoomId(String(roomNumber))
     setRoomNumber(roomNumber)
     setStatus(0)
   })
@@ -59,18 +58,21 @@ export default function Home() {
     
   })
 
-  const members = ( async () => {
-
+  const detectId = ( async (number) => {
+    const q = query(collection(db, "rooms"), where("number", "==", number))
+    const room = await getDocs(q)
+    room.forEach((item)=> {
+      console.log(item)
+    })
   })
-
 
   const onChangeRoomNumber = ((e)=> {
     setRoomNumberTemp(e.target.value)
   })
 
-  const enterRoom = (() => {
-    console.log(roomNumberTemp)
+  const enterRoom = ( () => {
     setRoomNumber(roomNumberTemp)
+    setRoomId(String(roomNumberTemp))
   })
   if(roomNumber) {
     return (

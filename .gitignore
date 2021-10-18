@@ -35,3 +35,9 @@ yarn-error.log*
 
 # firebase
 .firebasesdk
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local

@@ -5,7 +5,7 @@
         <button @click="createRoom">ルームを作成する</button>
         <div>
           <label>入室する</label>
-          <input type="number" :value="state.roomNumberTemp" />
+          <input type="number" v-model="state.roomNumberTemp" />
           <button @click="enterRoom">入室する</button>
         </div>
       </template>
@@ -35,6 +35,10 @@ export default defineComponent({
       roomNumberTemp: "",
       status: 0,
 
+    })
+    
+    onMounted(async () => {
+      // セッションをチェックしてroomIdがあれば追加。
     })
 
     // 部屋番号の生成
@@ -75,23 +79,20 @@ export default defineComponent({
       state.roomId = String(roomNumber)
       state.roomNumber = roomNumber
       state.status = 0
-      console.log(state.roomId)
     })
 
 
   const enterRoom = ( () => {
-    state.roomId = String(state.roomNumberTemp);
+    // ここに存在確認いれる
+    state.roomId = String(state.roomNumberTemp)
   })
 
-    // const enterRoom = ( () => {
-    //   setRoomNumber(roomNumberTemp)
-    //   setRoomId(String(roomNumberTemp))
-    // })
 
     return {
       message,
       state,
       createRoom,
+      enterRoom,
     }
   }
 })

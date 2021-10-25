@@ -5,9 +5,11 @@
     <input type="text" v-model="state.tempName" />
     <button @click="submitName">ニックネーム登録</button>
     <ul v-if="state.member">
-        <li v-for="person in state.member" :key="person.id">
-            {{person}}
-        </li>
+      <li v-for="person in state.member" :key="person.id">
+        {{ person.name }}
+        <br>
+        {{ person.status}}
+      </li>
     </ul>
   </div>
 </template>
@@ -39,47 +41,49 @@ export default defineComponent({
     const state = reactive({
       member: [],
       tempName: "",
+      selfStatus: "",
     });
 
+    const userQuery = query(
+      collection(db, "users"),
+      where("roomid", "==", roomid)
+    );
 
-
-
-    onMounted( () => {
-      const userQuery = query(collection(db, "users"), where("roomid", "==", roomid))
-        
-      const unsub = onSnapshot(userQuery, (doc) => {
-            doc.forEach((dd) => {
-                console.log(dd)
-            })
-        })
+    const unsub = onSnapshot(userQuery, (querySnapshot) => {
+      state.member = [];
+      querySnapshot.forEach((doc) => {
+        state.member.push(doc.data());
+      });
     });
 
+    onMounted(() => {});
 
     const submitName = async () => {
-        const ob = {
-          name: state.tempName,
-          roomid: roomid,
-          status: 0,
-          hanged: 0,
-        }
-        await addDoc(collection(db, "users"), ob)
-    }
+      const ob = {
+        name: state.tempName,
+        roomid: roomid,
+        status: 0,
+        hanged: 0,
+      };
+      await addDoc(collection(db, "users"), ob);
+    };
 
     const fetchUsers = async () => {
       const q = query(collection(db, "users"), where("roomid", "==", roomid));
       const querySnapshot = await getDocs(q);
-      const user = [];
       querySnapshot.forEach((doc) => {
-        user.push(doc.data());
+        state.member.push(doc.data());
       });
-      return user;
     };
 
+    onBeforeUnmount(() => {
+      unsub();
+    });
 
     return {
-        submitName,
-        state,
-    }
+      submitName,
+      state,
+    };
   },
 });
 </script>
